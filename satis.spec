@@ -3,7 +3,7 @@
 Summary:	Package Repository Generator
 Name:		satis
 Version:	1.0.0
-Release:	0.1
+Release:	0.2
 License:	MIT
 Group:		Development/Languages/PHP
 Source0:	https://github.com/composer/satis/archive/master.tar.gz
@@ -11,10 +11,13 @@ Source0:	https://github.com/composer/satis/archive/master.tar.gz
 URL:		https://github.com/composer/satis
 BuildRequires:	composer-php
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
+BuildRequires:	rpmbuild(macros) >= 1.461
+BuildRequires:	sed >= 4.0
 Requires:	php(core) >= %{php_min_version}
-Requires:	php(phar)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_appdir		%{_datadir}/%{name}
 
 %description
 Simple static Composer repository generator.
@@ -27,15 +30,17 @@ Repository file.
 %setup -qc
 mv %{name}-*/* .
 
+
+%{__sed} -i -e '1s,^#!.*env php,#!%{__php},' bin/*
+
 %build
 composer install -v
 
-%{__php} -d phar.readonly=0 -d memory_limit=512M ./bin/compile
-
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
-cp -p %{name}.phar $RPM_BUILD_ROOT%{_bindir}/%{name}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_appdir}}
+cp -a bin src vendor $RPM_BUILD_ROOT%{_appdir}
+ln -s %{_appdir}/bin/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -44,3 +49,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README.md LICENSE
 %attr(755,root,root) %{_bindir}/satis
+%dir %{_appdir}
+%dir %{_appdir}/bin
+%attr(755,root,root) %{_appdir}/bin/*
+%{_appdir}/vendor
+%{_appdir}/src
