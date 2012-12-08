@@ -2,7 +2,7 @@
 %include	/usr/lib/rpm/macros.php
 Summary:	Package Repository Generator
 Name:		satis
-Version:	0.1
+Version:	1.0.0
 Release:	0.1
 License:	MIT
 Group:		Development/Languages/PHP
