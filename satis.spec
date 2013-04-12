@@ -3,17 +3,21 @@
 Summary:	Package Repository Generator
 Name:		satis
 Version:	1.0.0
-Release:	0.3
+Release:	0.9
 License:	MIT
 Group:		Development/Languages/PHP
-Source0:	https://github.com/composer/satis/archive/master.tar.gz
-# Source0-md5:	a149bce7151e35dc23acc53522eefea5
+Source0:	https://github.com/composer/satis/archive/master.tar.gz?/%{name}-%{version}.tgz
+# Source0-md5:	3f36d065a6bfc9adef23e2f0a74b42f3
 URL:		https://github.com/composer/satis
-BuildRequires:	composer-php
+BuildRequires:	composer
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
 BuildRequires:	rpmbuild(macros) >= 1.461
 BuildRequires:	sed >= 4.0
 Requires:	php(core) >= %{php_min_version}
+Requires:	php(ctype)
+Requires:	php(json)
+Requires:	php(spl)
+Suggests:	php(openssl)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -30,17 +34,20 @@ Repository file.
 %setup -qc
 mv %{name}-*/* .
 
-
 %{__sed} -i -e '1s,^#!.*env php,#!%{__php},' bin/*
+%{__rm} composer.lock
 
 %build
-composer install -v
+COMPOSER_HOME=${PWD:=$(pwd)} \
+composer install --prefer-dist -v
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_appdir}}
 cp -a bin src vendor views $RPM_BUILD_ROOT%{_appdir}
 ln -s %{_appdir}/bin/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
+
+%{__rm} -r $RPM_BUILD_ROOT%{_appdir}/vendor/twig/twig/test
 
 %clean
 rm -rf $RPM_BUILD_ROOT
