@@ -1,13 +1,15 @@
+%define		subver	alpha1
+%define		rel		0.1
 %define		php_min_version 5.3.4
 %include	/usr/lib/rpm/macros.php
 Summary:	Package Repository Generator
 Name:		satis
 Version:	1.0.0
-Release:	0.9
+Release:	1.%{subver}.%{rel}
 License:	MIT
 Group:		Development/Languages/PHP
-Source0:	https://github.com/composer/satis/archive/master.tar.gz?/%{name}-%{version}.tgz
-# Source0-md5:	3f36d065a6bfc9adef23e2f0a74b42f3
+Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
+# Source0-md5:	708ebffa7b7053ed19f65c470d8c1966
 URL:		https://github.com/composer/satis
 BuildRequires:	composer
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
@@ -32,15 +34,15 @@ It uses any composer.json file as input and dumps all the required
 Repository file.
 
 %prep
-%setup -qc
+%setup -qc -n %{name}-%{version}%{?subver}
 mv %{name}-*/* .
 
 %{__sed} -i -e '1s,^#!.*env php,#!%{__php},' bin/*
 %{__rm} composer.lock
 
 %build
-COMPOSER_HOME=${PWD:=$(pwd)} \
-composer install --prefer-dist -v
+COMPOSER_HOME=${PWD:-$(pwd)} \
+composer install --prefer-dist --no-dev -v
 
 %install
 rm -rf $RPM_BUILD_ROOT
