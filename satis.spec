@@ -18,6 +18,7 @@ BuildRequires:	sed >= 4.0
 Requires:	php(core) >= %{php_min_version}
 Requires:	php(ctype)
 Requires:	php(filter)
+Requires:	php(hash)
 Requires:	php(json)
 Requires:	php(spl)
 Suggests:	php(openssl)
