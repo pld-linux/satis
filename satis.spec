@@ -1,5 +1,5 @@
 %define		subver	alpha1
-%define		rel		0.1
+%define		rel		0.2
 %define		php_min_version 5.3.4
 %include	/usr/lib/rpm/macros.php
 Summary:	Package Repository Generator
@@ -10,6 +10,7 @@ License:	MIT
 Group:		Development/Languages/PHP
 Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
 # Source0-md5:	708ebffa7b7053ed19f65c470d8c1966
+Patch0:		versionparser.patch
 URL:		https://github.com/composer/satis
 BuildRequires:	composer
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
@@ -47,6 +48,8 @@ mv %{name}-*/* .
 %build
 COMPOSER_HOME=${PWD:-$(pwd)} \
 composer install --prefer-dist --no-dev -v
+
+%patch0 -p0
 
 %install
 rm -rf $RPM_BUILD_ROOT
