@@ -23,6 +23,7 @@ Requires:	php(json)
 Requires:	php(phar)
 Requires:	php(spl)
 Suggests:	php(openssl)
+Suggests:	php(zlib)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
