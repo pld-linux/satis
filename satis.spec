@@ -20,6 +20,7 @@ Requires:	php(ctype)
 Requires:	php(filter)
 Requires:	php(hash)
 Requires:	php(json)
+Requires:	php(phar)
 Requires:	php(spl)
 Suggests:	php(openssl)
 BuildArch:	noarch
