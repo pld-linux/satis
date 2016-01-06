@@ -1,0 +1,26 @@
+--- satis-1.0.0-1.alpha1.152.g48191ff.0.5/bin/satis~	2016-01-06 22:35:05.000000000 +0200
++++ satis-1.0.0-1.alpha1.152.g48191ff.0.5/bin/satis	2016-01-06 22:36:09.726705543 +0200
+@@ -1,7 +1,11 @@
+ #!/usr/bin/php
+ <?php
+ 
+-require __DIR__.'/../src/bootstrap.php';
++if (file_exists($autoload = __DIR__ . '/../src/bootstrap.php')) {
++	require $autoload;
++} else {
++	require '/usr/share/php/Composer/autoload.php';
++}
+ 
+ use Composer\Satis\Console\Application;
+ 
+--- satis-1.0.0-1.alpha1.152.g48191ff.0.5/src/Composer/Satis/Command/BuildCommand.php~	2016-01-06 09:33:13.000000000 +0200
++++ satis-1.0.0-1.alpha1.152.g48191ff.0.5/src/Composer/Satis/Command/BuildCommand.php	2016-01-06 22:45:02.087397288 +0200
+@@ -254,7 +254,7 @@
+ 
+             $data = json_decode($content);
+ 
+-            $schemaFile = __DIR__.'/../../../../res/satis-schema.json';
++            $schemaFile = __DIR__.'/../res/satis-schema.json';
+             $schema = json_decode(file_get_contents($schemaFile));
+             $validator = new Validator();
+             $validator->check($data, $schema);
