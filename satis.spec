@@ -1,5 +1,5 @@
 
-%define		rel		0.13
+%define		rel		0.14
 %define		githash	48191ff
 # $ git rev-list 1.0.0-alpha1..%{githash} --count
 %define		commits	152
@@ -17,6 +17,8 @@ Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}
 # Source0-md5:	adee07882bc8c526b6bd3489812bc194
 Source1:	autoload.php
 Patch0:		autoload.patch
+Patch1:		https://github.com/composer/satis/pull/292.patch
+# Patch1-md5:	28bbf057c6771e7ddda8ce1be14d22e5
 URL:		https://github.com/composer/satis
 BuildRequires:	composer
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
@@ -44,6 +46,7 @@ Repository file.
 %setup -qc -n %{name}-%{version}-%{release}
 mv %{name}-*/* .
 %patch0 -p1
+%patch1 -p1
 
 %{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
 
