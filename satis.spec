@@ -1,15 +1,20 @@
+
+%define		rel		0.4
+%define		githash	48191ff
+# $ git rev-list 1.0.0-alpha1..%{githash} --count
+%define		commits	152
 %define		subver	alpha1
-%define		rel		0.2
 %define		php_min_version 5.3.4
 %include	/usr/lib/rpm/macros.php
 Summary:	Package Repository Generator
 Name:		satis
 Version:	1.0.0
-Release:	1.%{subver}.%{rel}
+Release:	1.%{subver}%{?commits:.%{commits}}%{?githash:.g%{githash}}.%{rel}
 License:	MIT
 Group:		Development/Languages/PHP
-Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
-# Source0-md5:	708ebffa7b7053ed19f65c470d8c1966
+#Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
+Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}-%{subver}-%{commits}-g%{githash}.tar.gz
+# Source0-md5:	adee07882bc8c526b6bd3489812bc194
 Patch0:		versionparser.patch
 URL:		https://github.com/composer/satis
 BuildRequires:	composer
@@ -39,17 +44,16 @@ It uses any composer.json file as input and dumps all the required
 Repository file.
 
 %prep
-%setup -qc -n %{name}-%{version}%{?subver}
+%setup -qc -n %{name}-%{version}-%{release}
 mv %{name}-*/* .
 
-%{__sed} -i -e '1s,^#!.*env php,#!%{__php},' bin/*
+%{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
 %{__rm} composer.lock
 
 %build
-COMPOSER_HOME=${PWD:-$(pwd)} \
 composer install --prefer-dist --no-dev -v
 
-%patch0 -p0
+%patch0 -p7 -d vendor/composer/semver/src
 
 %install
 rm -rf $RPM_BUILD_ROOT
