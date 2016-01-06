@@ -1,5 +1,5 @@
 
-%define		rel		0.5
+%define		rel		0.8
 %define		githash	48191ff
 # $ git rev-list 1.0.0-alpha1..%{githash} --count
 %define		commits	152
@@ -15,23 +15,17 @@ Group:		Development/Languages/PHP
 #Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
 Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}-%{subver}-%{commits}-g%{githash}.tar.gz
 # Source0-md5:	adee07882bc8c526b6bd3489812bc194
-Source1:	autoload.php
+Patch0:		autoload.patch
 URL:		https://github.com/composer/satis
 BuildRequires:	composer
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
 BuildRequires:	rpmbuild(macros) >= 1.461
 BuildRequires:	sed >= 4.0
-Requires:	composer >= 1.0.0-15.alpha11
+Requires:	composer >= 1.0.0-16.alpha11
 Requires:	php(core) >= %{php_min_version}
-Requires:	php(ctype)
-Requires:	php(filter)
 Requires:	php(hash)
 Requires:	php(json)
-Requires:	php(phar)
-Requires:	php(spl)
-Suggests:	php(openssl)
-Suggests:	php(zip)
-Suggests:	php(zlib)
+Requires:	php(pcre)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -47,10 +41,12 @@ Repository file.
 %prep
 %setup -qc -n %{name}-%{version}-%{release}
 mv %{name}-*/* .
-
-cp -p %{SOURCE1} src/bootstrap.php
+%patch0 -p1
 
 %{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
+
+# move to Source dir, eases packaging
+mv res views src/Composer/Satis
 
 # not needed runtime
 mv bin/compile .
@@ -58,10 +54,9 @@ mv src/Composer/Satis/Compiler.php .
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{php_data_dir}/Composer,%{_appdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{php_data_dir}/Composer}
 cp -a src/Composer $RPM_BUILD_ROOT%{php_data_dir}
-cp -a bin views $RPM_BUILD_ROOT%{_appdir}
-ln -s %{_appdir}/bin/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
+install -p bin/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -71,7 +66,3 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md LICENSE
 %attr(755,root,root) %{_bindir}/satis
 %{php_data_dir}/Composer/Satis
-%dir %{_appdir}
-%dir %{_appdir}/bin
-%attr(755,root,root) %{_appdir}/bin/*
-%{_appdir}/views
