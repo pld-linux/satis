@@ -29,6 +29,7 @@ Requires:	php(core) >= %{php_min_version}
 Requires:	php(hash)
 Requires:	php(json)
 Requires:	php(pcre)
+Requires:	php-composer-semver >= 1.2.0-2
 Requires:	php-twig-Twig >= 1.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
