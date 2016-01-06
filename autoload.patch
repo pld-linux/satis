@@ -5,10 +5,10 @@
  <?php
  
 -require __DIR__.'/../src/bootstrap.php';
-+if (file_exists($autoload = __DIR__ . '/../src/bootstrap.php')) {
++if (file_exists($autoload = __DIR__ . '/../src/Composer/Satis/autoload.php')) {
 +	require $autoload;
 +} else {
-+	require '/usr/share/php/Composer/autoload.php';
++	require '/usr/share/php/Composer/Satis/autoload.php';
 +}
  
  use Composer\Satis\Console\Application;

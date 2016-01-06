@@ -1,5 +1,5 @@
 
-%define		rel		0.8
+%define		rel		0.12
 %define		githash	48191ff
 # $ git rev-list 1.0.0-alpha1..%{githash} --count
 %define		commits	152
@@ -15,6 +15,7 @@ Group:		Development/Languages/PHP
 #Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
 Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}-%{subver}-%{commits}-g%{githash}.tar.gz
 # Source0-md5:	adee07882bc8c526b6bd3489812bc194
+Source1:	autoload.php
 Patch0:		autoload.patch
 URL:		https://github.com/composer/satis
 BuildRequires:	composer
@@ -26,6 +27,7 @@ Requires:	php(core) >= %{php_min_version}
 Requires:	php(hash)
 Requires:	php(json)
 Requires:	php(pcre)
+Requires:	php-twig-Twig >= 1.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -44,6 +46,8 @@ mv %{name}-*/* .
 %patch0 -p1
 
 %{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
+
+cp -p %{SOURCE1} src/Composer/Satis/autoload.php
 
 # move to Source dir, eases packaging
 mv res views src/Composer/Satis
