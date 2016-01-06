@@ -1,5 +1,5 @@
 
-%define		rel		0.14
+%define		rel		1
 %define		githash	48191ff
 # $ git rev-list 1.0.0-alpha1..%{githash} --count
 %define		commits	152
