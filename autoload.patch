@@ -24,14 +24,14 @@
              $schema = json_decode(file_get_contents($schemaFile));
              $validator = new Validator();
              $validator->check($data, $schema);
---- satis-1.0.0-1.alpha1.152.g48191ff.0.5/src/Composer/Satis/Builder/WebBuilder.php~	2016-01-06 09:33:13.000000000 +0200
-+++ satis-1.0.0-1.alpha1.152.g48191ff.0.5/src/Composer/Satis/Builder/WebBuilder.php	2016-01-06 23:10:27.276318960 +0200
-@@ -35,7 +35,7 @@
-     {
-         $twigTemplate = isset($this->config['twig-template']) ? $this->config['twig-template'] : null;
+--- satis-1.0.0-1.alpha1.197.g6ddaf74.1/src/Composer/Satis/Builder/WebBuilder.php~	2016-04-05 18:16:09.000000000 +0300
++++ satis-1.0.0-1.alpha1.197.g6ddaf74.1/src/Composer/Satis/Builder/WebBuilder.php	2016-04-07 21:01:12.883296920 +0300
+@@ -103,7 +103,7 @@
+         if (null === $this->twig) {
+             $twigTemplate = isset($this->config['twig-template']) ? $this->config['twig-template'] : null;
  
--        $templateDir = $twigTemplate ? pathinfo($twigTemplate, PATHINFO_DIRNAME) : __DIR__.'/../../../../views';
-+        $templateDir = $twigTemplate ? pathinfo($twigTemplate, PATHINFO_DIRNAME) : __DIR__.'/../views';
-         $loader = new \Twig_Loader_Filesystem($templateDir);
-         $twig = new \Twig_Environment($loader);
- 
+-            $templateDir = $twigTemplate ? pathinfo($twigTemplate, PATHINFO_DIRNAME) : __DIR__.'/../../../../views';
++            $templateDir = $twigTemplate ? pathinfo($twigTemplate, PATHINFO_DIRNAME) : __DIR__.'/../views';
+             $loader = new \Twig_Loader_Filesystem($templateDir);
+             $this->twig = new \Twig_Environment($loader);
+         }

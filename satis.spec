@@ -1,8 +1,8 @@
 
 %define		rel		1
-%define		githash	48191ff
+%define		githash	6a8e47e
 # $ git rev-list 1.0.0-alpha1..%{githash} --count
-%define		commits	152
+%define		commits	193
 %define		subver	alpha1
 %define		php_min_version 5.3.4
 %include	/usr/lib/rpm/macros.php
@@ -14,17 +14,14 @@ License:	MIT
 Group:		Development/Languages/PHP
 #Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
 Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}-%{subver}-%{commits}-g%{githash}.tar.gz
-# Source0-md5:	adee07882bc8c526b6bd3489812bc194
+# Source0-md5:	ec71a1da6009bf5198a6a8c736c10aab
 Source1:	autoload.php
 Patch0:		autoload.patch
-Patch1:		https://github.com/composer/satis/pull/292.patch
-# Patch1-md5:	28bbf057c6771e7ddda8ce1be14d22e5
 URL:		https://github.com/composer/satis
-BuildRequires:	composer
 BuildRequires:	rpm-php-pearprov >= 4.4.2-11
 BuildRequires:	rpmbuild(macros) >= 1.461
 BuildRequires:	sed >= 4.0
-Requires:	composer >= 1.0.0-16.alpha11
+Requires:	composer >= 1.0.0-18
 Requires:	php(core) >= %{php_min_version}
 Requires:	php(hash)
 Requires:	php(json)
@@ -47,7 +44,6 @@ Repository file.
 %setup -qc -n %{name}-%{version}-%{release}
 mv %{name}-*/* .
 %patch0 -p1
-%patch1 -p1
 
 %{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
 
