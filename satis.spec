@@ -14,7 +14,7 @@ License:	MIT
 Group:		Development/Languages/PHP
 #Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
 Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}-%{subver}-%{commits}-g%{githash}.tar.gz
-# Source0-md5:	ec71a1da6009bf5198a6a8c736c10aab
+# Source0-md5:	6983a32de40172f5a1b9332c00817d68
 Source1:	autoload.php
 Patch0:		autoload.patch
 URL:		https://github.com/composer/satis
