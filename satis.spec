@@ -1,20 +1,14 @@
 
-%define		rel		1
-%define		githash	6a8e47e
-# $ git rev-list 1.0.0-alpha1..%{githash} --count
-%define		commits	193
-%define		subver	alpha1
-%define		php_min_version 5.3.4
+%define		php_min_version 5.4.0
 %include	/usr/lib/rpm/macros.php
 Summary:	Package Repository Generator
 Name:		satis
 Version:	1.0.0
-Release:	1.%{subver}%{?commits:.%{commits}}%{?githash:.g%{githash}}.%{rel}
+Release:	2
 License:	MIT
 Group:		Development/Languages/PHP
-#Source0:	https://github.com/composer/satis/archive/%{version}-%{subver}/%{name}-%{version}%{subver}.tar.gz
-Source0:	https://github.com/composer/satis/archive/%{githash}/%{name}-%{version}-%{subver}-%{commits}-g%{githash}.tar.gz
-# Source0-md5:	6983a32de40172f5a1b9332c00817d68
+Source0:	https://github.com/composer/satis/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	884bf6850503c0cf5eff693b841b3f1b
 Source1:	autoload.php
 Patch0:		autoload.patch
 URL:		https://github.com/composer/satis
@@ -41,25 +35,23 @@ It uses any composer.json file as input and dumps all the required
 Repository file.
 
 %prep
-%setup -qc -n %{name}-%{version}-%{release}
-mv %{name}-*/* .
+%setup -q
 %patch0 -p1
 
 %{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
 
-cp -p %{SOURCE1} src/Composer/Satis/autoload.php
+cp -p %{SOURCE1} src/autoload.php
 
 # move to Source dir, eases packaging
-mv res views src/Composer/Satis
+mv res views src
 
 # not needed runtime
-mv bin/compile .
-mv src/Composer/Satis/Compiler.php .
+mv bin/docker* bin/*.bat .
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{php_data_dir}/Composer}
-cp -a src/Composer $RPM_BUILD_ROOT%{php_data_dir}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{php_data_dir}/Composer/Satis}
+cp -a src/* $RPM_BUILD_ROOT%{php_data_dir}/Composer/Satis
 install -p bin/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 
 %clean
