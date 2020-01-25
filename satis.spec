@@ -1,6 +1,5 @@
 
 %define		php_min_version 5.4.0
-%include	/usr/lib/rpm/macros.php
 Summary:	Package Repository Generator
 Name:		satis
 Version:	1.0.0
