@@ -35,7 +35,7 @@ Repository file.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %{__sed} -i -e '1s,^#!.*env php,#!/usr/bin/php,' bin/*
 
